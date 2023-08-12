@@ -1,0 +1,11 @@
+{
+    "name": "willry/exemplo-beanstalkd",
+    "autoload": {
+        "psr-4": {
+            "App\\": "src/"
+        }
+    },
+    "require": {
+        "pda/pheanstalk": "^4.0"
+    }
+}

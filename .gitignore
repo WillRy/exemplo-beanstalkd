@@ -1,0 +1,13 @@
+.vscode
+.idea
+.fleet
+
+docker/dbdata
+docker/beanstalkd/cache
+docker/beanstalkd/dir
+docker/beanstalkd/log
+docker/beanstalkd/persist
+
+
+.composer
+.bash_history
