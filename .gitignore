@@ -9,5 +9,6 @@ docker/beanstalkd/log
 docker/beanstalkd/persist
 
 
+vendor
 .composer
 .bash_history

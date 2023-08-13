@@ -3,14 +3,6 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Pheanstalk\Pheanstalk;
 
-
-
-function gerarConexao()
-{
-    return Pheanstalk::create('beanstalkd');
-}
-
-
 /**
  * IMPORTANTE: Um loop connection mantém a execução do worker e reconecta automaticamente
  * em caso de algum erro de conexão, é normal que sockets sofram desconexões por inatividade,
@@ -20,8 +12,8 @@ function loopConnection($callback)
 {
     while (true) {
         try {
-            $pheanstalk = gerarConexao();
-            $callback($pheanstalk);
+            $connection = Pheanstalk::create('beanstalkd');
+            $callback($connection);
         } catch (\Pheanstalk\Exception\ConnectionException $e) {
             echo 'ConnectionException ' . $e->getMessage() . " | file:" . $e->getFile() . " | line:" . $e->getLine() . PHP_EOL;
             sleep(2);
@@ -36,13 +28,11 @@ function loopConnection($callback)
  * Inicia o processamento
  */
 loopConnection(function ($pheanstalk) {
-
-
     while (true) {
 
         $pheanstalk->watch('testtube');
 
-        $job = $pheanstalk->reserveWithTimeout(50);
+        $job = $pheanstalk->reserve();
         
         if (isset($job)) {
             try {
