@@ -58,6 +58,9 @@ loopConnection(function ($pheanstalk) {
         $job = $pheanstalk->reserve();
 
         if (isset($job)) {
+
+            //bloqueia tentativas de parar o script, para esperar finalizar a task, evitando encerrar
+            //com ela sendo processada no "meio"
             pcntl_sigprocmask(SIG_BLOCK, [SIGTERM, SIGINT]);
 
             try {
@@ -71,16 +74,16 @@ loopConnection(function ($pheanstalk) {
             } catch (\Throwable $t) {
                 echo "\n{$t->getMessage()}\n";
 
-                // liberando para outro worker pegar de novo
                 $pheanstalk->release($job);
             }
 
+            // libera as tentativas de "encerrar" e executa as que foram feitas enquanto bloqueado
             pcntl_sigprocmask(SIG_UNBLOCK, [SIGTERM, SIGINT]);
         }
 
-        // delay de processamento, para evitar sobrecarga
         sleep(1);
 
+        //dispara "signals" dentro do loop, para ser possível detectar tentativa de finalização
         pcntl_signal_dispatch();
     }
 });
