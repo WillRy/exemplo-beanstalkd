@@ -7,7 +7,7 @@ $pheanstalk = Pheanstalk::create('beanstalkd');
 
 // Queue a Job
 
-for ($i=0; $i < 10; $i++) { 
+for ($i=0; $i < 1000; $i++) { 
     $pheanstalk
         ->useTube('testtube')
         ->put(

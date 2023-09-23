@@ -1,7 +1,6 @@
 <?php
 require __DIR__ . '/../vendor/autoload.php';
 
-use Pheanstalk\Contract\JobIdInterface;
 use Pheanstalk\Job;
 use Pheanstalk\Pheanstalk;
 use WillRy\Bean\Queue;
@@ -10,7 +9,7 @@ $queue = new Queue("beanstalkd");
 
 
 /**
- * Callback que o retorno boolean determina se o item
+ * [OPCIONAL] Callback que o retorno boolean determina se o item
  * vai ser processado ou devolvido para a fila, util quando
  * queremos dar uma pausa nos workers
  */
@@ -19,7 +18,7 @@ $queue->onCheckStatus(function (Job $job) {
 });
 
 /**
- * Callback que o retorno boolean determina se o item
+ * [OPCIONAL] Callback que o retorno boolean determina se o item
  * vai ser excluído ou vai continuar o processamento
  * 
  * Util quando queremos validar se o item não é muito velho na fila,
@@ -56,7 +55,7 @@ $queue->onExecuting(function (Pheanstalk $beanstalk, Job $job) {
 });
 
 /**
- * Callback que vai executar a caso aconteça alguma exception inesperada
+ * [OPCIONAL] Callback que vai executar a caso aconteça alguma exception inesperada
  * e não tratada por try/catch no "onExecuting"
  */
 $queue->onError(function (Pheanstalk $beanstalk, Job $job) {
